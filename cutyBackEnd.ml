@@ -22,7 +22,7 @@ let new_text_node id text size borderColor =
   s##innerHTML <- Js.string text;
   s##style##fontSize <- Js.string size;
   s##style##padding <- Js.string "1px";
-  s##style##margin <- Js.string "0px";
+  s##style##margin <- Js.string "5px";
   s##style##borderColor <- Js.string borderColor;
   s##style##borderWidth <- Js.string "1px";
   s##style##borderStyle <- Js.string "solid";

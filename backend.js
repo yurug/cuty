@@ -10,7 +10,7 @@ var DOMURL = window.URL || window.webkitURL || window;
 function new_node (id, innerHTML, width, height) {
     var data =
 	'<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" ' + 'height="' + height + '">' +
-        '<foreignObject x="0" y="10" width="90%" height="90%">' +
+        '<foreignObject x="0" y="0" width="90%" height="90%">' +
         '<div xmlns="http://www.w3.org/1999/xhtml"><p>' +
 	innerHTML +
         '</p></div>' +
