@@ -32,8 +32,8 @@ function draw() {
     var options = {
        physics: {stabilization: false},
 	edges: {smooth: false},
-	height: "800px",
-	width: "600px"
+	height: "100hv",
+	width: "100wv"
     };
     network = new vis.Network(container, data, options);
 }
