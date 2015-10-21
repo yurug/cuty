@@ -35,7 +35,11 @@ function draw() {
 	height: "800px",
 	width: "100wv"
     };
+
     network = new vis.Network(container, data, options);
 }
 
+function installOnClick (callback) {
+    network.on ('click', callback);
+}
 

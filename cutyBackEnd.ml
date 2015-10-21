@@ -27,3 +27,17 @@ let new_text_node id text size borderColor =
   s##style##borderWidth <- Js.string "1px";
   s##style##borderStyle <- Js.string "solid";
   new_node id s (get_element_dimension s)
+
+let onclick on_click_node e =
+  Firebug.console##log (Js.string "click");
+  Firebug.console##log (e);
+  let nodes = Js.Unsafe.get e (Js.string "nodes") in
+  Firebug.console##log (nodes);
+  nodes##forEach (fun node _ _ -> on_click_node (Js.to_string node))
+
+let init_backend on_click_node : unit = Js.Unsafe.(
+  eval_string "draw ();";
+  fun_call (eval_string "installOnClick") [|
+    inject (Js.wrap_callback (onclick on_click_node))
+  |]
+)

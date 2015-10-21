@@ -6,6 +6,7 @@ let start_with goal =
     fun () ->
       let rec loop (proof_state : ProofEngine.proof_state) =
 	UI.next_user_action (fun action ->
+	  Firebug.console##log (Js.string "The engine processes the user action.");
 	  let tactic : ProofEngine.tactic = tactic_of_user_action action  in
 	  let dgoals = ProofEngine.apply proof_state tactic in
 	  let proof_state' = ProofEngine.change proof_state dgoals in
