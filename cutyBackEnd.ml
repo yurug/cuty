@@ -12,7 +12,7 @@ let get_element_dimension (e : Dom_html.element Js.t) =
 let new_node id d (width, height) : unit =
   let command =
     Printf.sprintf "new_node (%d, '%s', '%d', '%d');"
-      id (div_as_string d) (1 + width) (1 + height)
+      id (div_as_string d) (10 + width) (10 + height)
   in
   Firebug.console##log (command);
   Js.Unsafe.eval_string command

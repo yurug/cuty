@@ -1347,7 +1347,7 @@ aD=am.document;W([b,dS,0]);am.HTMLElement===dK;var
 dT=ek(0);function
 dU(a){return aQ(a.outerHTML)}function
 dX(a,b,c){var
-e=1+c[2]|0,f=1+c[1]|0,g=dU(b),d=d3(dH(dY),a,g,f,e);R(dT,dZ,[0,d]);return bZ(d)}function
+e=10+c[2]|0,f=10+c[1]|0,g=dU(b),d=d3(dH(dY),a,g,f,e);R(dT,dZ,[0,d]);return bZ(d)}function
 d0(a){return bZ(d1)}function
 bd(a){d0(0);var
 b=R(aD,dR,[0,"span"]);b.innerHTML="foobar";b.style.fontSize="2em";b.style.padding=bN;b.style.margin="0px";b.style.borderColor="#FF00FF";b.style.borderWidth=bN;b.style.borderStyle="solid";b.style.visibility="hidden";R(aD.body,dV,[0,b]);var
