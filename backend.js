@@ -7,9 +7,9 @@ var LENGTH_MAIN = 500;
 var LENGTH_SUB = 500;
 var DOMURL = window.URL || window.webkitURL || window;
 
-function new_node (id, innerHTML) {
+function new_node (id, innerHTML, width, height) {
     var data =
-	'<svg xmlns="http://www.w3.org/2000/svg" width="390px" height="400px">' +
+	'<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" ' + 'height="' + height + '">' +
         '<foreignObject x="0" y="0" width="100%" height="100%">' +
         '<div xmlns="http://www.w3.org/1999/xhtml">' +
 	innerHTML +
