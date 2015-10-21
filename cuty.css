@@ -1,0 +1,10 @@
+body {
+    font: 10pt arial;
+}
+
+#playground {
+    width: 600px;
+    fixed-height: 1000px;
+    border: 1px solid lightgray;
+    background-color:#eeeeee;
+}
