@@ -3,14 +3,14 @@ var edges = null;
 var network = null;
 
 var DIR = 'img/refresh-cl/';
-var LENGTH_MAIN = 500;
-var LENGTH_SUB = 500;
+var LENGTH_MAIN = 150;
+var LENGTH_SUB = 50;
 var DOMURL = window.URL || window.webkitURL || window;
 
 function new_node (id, innerHTML, width, height) {
     var data =
 	'<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" ' + 'height="' + height + '">' +
-        '<foreignObject x="0" y="0" width="90%" height="90%">' +
+        '<foreignObject x="0" y="10" width="90%" height="90%">' +
         '<div xmlns="http://www.w3.org/1999/xhtml"><p>' +
 	innerHTML +
         '</p></div>' +
@@ -33,7 +33,7 @@ function draw() {
        physics: {stabilization: false},
 	edges: {smooth: false},
 	height: "800px",
-	width: "100vw"
+	width: "600px"
     };
     network = new vis.Network(container, data, options);
 }
