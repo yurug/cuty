@@ -3,7 +3,7 @@ let init_backend () : unit =
 
 let onload _ =
   init_backend ();
-  CutyBackEnd.new_text_node 3 "foo" "3em" "#FF00FF";
+  CutyBackEnd.new_text_node 3 "foo" "300em" "#FF00FF";
   Js._false
 
 let go =
