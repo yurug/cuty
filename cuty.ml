@@ -1,10 +1,25 @@
-let init_backend () : unit =
-  Js.Unsafe.eval_string "draw ();"
+let tactic_of_user_action = function
+  | UI.Use id -> ProofEngine.assumption id
+
+let start_with goal =
+  Lwt.async (
+    fun () ->
+      let rec loop (proof_state : ProofEngine.proof_state) =
+	UI.next_user_action (fun action ->
+	  let tactic : ProofEngine.tactic = tactic_of_user_action action  in
+	  let dgoals = ProofEngine.apply proof_state tactic in
+	  let proof_state' = ProofEngine.change proof_state dgoals in
+	  UI.interpret dgoals
+	  >> loop proof_state'
+	)
+      in
+      UI.interpret (Goal.push_goal goal)
+      >> loop (ProofEngine.start_proof_for goal)
+  )
 
 let onload _ =
-  init_backend ();
-  CutyBackEnd.new_text_node 3 "foo" "2em" "#FF00FF";
-  CutyBackEnd.new_text_node 4 "bar" "2em" "#FF00FF";
+  UI.init ();
+  start_with (Goal.(make_goal [(Id 1, atom "A"); (Id 2, atom "B")] (Id 3, atom "A")));
   Js._false
 
 let go =

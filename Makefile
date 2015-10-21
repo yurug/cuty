@@ -7,7 +7,7 @@ SOURCES=$(wildcard *.ml)
 all: cuty.js
 
 cuty.js: $(SOURCES)
-	rm cuty.js
+	rm -f cuty.js
 	ocamlbuild -use-ocamlfind -plugin-tag "package(js_of_ocaml.ocamlbuild)" cuty.js
 	cp _build/cuty.js .
 
