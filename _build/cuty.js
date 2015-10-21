@@ -1350,7 +1350,7 @@ dX(a,b,c){var
 e=10+c[2]|0,f=10+c[1]|0,g=dU(b),d=d3(dH(dY),a,g,f,e);R(dT,dZ,[0,d]);return bZ(d)}function
 d0(a){return bZ(d1)}function
 bd(a){d0(0);var
-b=R(aD,dR,[0,"span"]);b.innerHTML="foobar";b.style.fontSize="2em";b.style.padding=bN;b.style.margin="0px";b.style.borderColor="#FF00FF";b.style.borderWidth=bN;b.style.borderStyle="solid";b.style.visibility="hidden";R(aD.body,dV,[0,b]);var
+b=R(aD,dR,[0,"span"]);b.innerHTML="foo";b.style.fontSize="2em";b.style.padding=bN;b.style.margin="0px";b.style.borderColor="#FF00FF";b.style.borderWidth=bN;b.style.borderStyle="solid";b.style.visibility="hidden";R(aD.body,dV,[0,b]);var
 c=[0,b.offsetWidth,b.offsetHeight];R(aD.body,dW,[0,b]);b.style.visibility="visible";dX(3,b,c);return dL}am.onload=function(a){if(1-(a==dJ?1:0)){var
 c=bd(a);if(!(c|0))R(a,dQ,[0]);return c}var
 d=event,b=bd(d);if(!(b|0))d.returnValue=b;return b};function
