@@ -1,3 +1,9 @@
+(* Ultra naive physic world. *)
+
+let world_friction = 0.5
+let reactivity = 0.5
+let absorption = 0.3
+
 type bbox = {
   id : Id.t;
   x : float;
@@ -19,7 +25,7 @@ type dt = bbox list
 
 let empty width height = {
   boxes = [];
-  friction = 0.5;
+  friction = world_friction;
   width;
   height;
 }
@@ -32,9 +38,12 @@ let rec intersect a b =
   && (abs_float(a.y -. b.y) *. 2. <= (a.h +. b.h))
 
 let collide boxes box =
-  List.exists (intersect box) boxes
+  List.find (intersect box) boxes
 
-let rec move boxes friction box =
+let update_box boxes box =
+  List.map (fun box' -> if box.id = box'.id then box else box') boxes
+
+let rec move friction boxes box =
   let box' =
     { box with
       x = box.x +. box.dx;
@@ -43,13 +52,17 @@ let rec move boxes friction box =
       dy = epsilon (box.dy *. friction)
     }
   in
-  if collide boxes box' then
-    move boxes friction { box with dx = -. box.dx; dy = -. box.dy }
-  else
-    box'
+  try
+    let box'' = collide boxes box' in
+    let box'' = { box'' with dx = absorption *. box.dx; dy = absorption *. box.dy } in
+    let boxes = update_box boxes box'' in
+    let box'  = { box' with dx = -. absorption *. box.dx; dy = -. absorption *. box.dy } in
+    update_box boxes box'
+  with Not_found ->
+    update_box boxes box'
 
 let next world =
-  let boxes' = List.map (move world.boxes world.friction) world.boxes in
+  let boxes' = List.fold_left (move world.friction) world.boxes world.boxes in
   let dboxes = List.(
     combine world.boxes boxes'
     |> filter (fun (b1, b2) -> b1 <> b2)
@@ -70,8 +83,25 @@ let new_box world id width height =
       dy = Random.float 10.;
     }
     in
-    Firebug.console##log (box);
-    if collide world.boxes box then find_place () else box
+    try ignore (collide world.boxes box); find_place () with _ -> box
   in
   let box = find_place () in
   { world with boxes = box :: world.boxes }, box
+
+let remove_box world id =
+  { world with boxes = List.filter (fun box -> box.id <> id) world.boxes }
+
+let change_box_attraction world id x y = try
+  let box = List.find (fun box -> box.id = id) world.boxes in
+  let dx = x -. box.x and dy = y -. box.y in
+  (* let r = reactivity *. (dx *. dx +. dy *. dy) in *)
+  let dx = reactivity *. dx and dy = reactivity *. dy in
+  (* Firebug.console##log_3 (Js.string "pos: ", box.x, box.y); *)
+  (* Firebug.console##log_3 (Js.string "npos: ", x, y); *)
+  (* Firebug.console##log_3 (Js.string "dir: ", dx, dy); *)
+  let boxes = List.map (fun box ->
+    if box.id = id then { box with dx; dy } else box
+  ) world.boxes
+  in
+  { world with boxes }
+with _ -> world

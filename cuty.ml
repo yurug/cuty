@@ -5,22 +5,31 @@
     adjust the user interface accordingly.
 
     The system is initialized with [goal].
+
 *)
 let start_with goal =
   Lwt.async (
     fun () ->
-      let rec loop (proof_state : ProofEngine.proof_state) =
+      let enter_loop_event proof_state =
+	let proof_state = ref proof_state in
 	UI.next_user_action (fun action ->
-	  Firebug.console##log (Js.string "The engine processes the user action.");
-	  let tactic = ProofEngineUI.tactic_of_user_action action  in
-	  let dgoals = ProofEngine.apply proof_state tactic in
-	  let proof_state' = ProofEngine.change proof_state dgoals in
-	  UI.interpret dgoals
-	  >> loop proof_state'
+	  try_lwt
+	    Firebug.console##log_2 (Js.string "Processing user action.",
+				    Js.string (UI.string_of_user_action action));
+	    let current_goal = ProofEngine.current_goal !proof_state in
+	    let tactic = ProofEngineUI.tactic_of_user_action current_goal action  in
+	    let dgoals = ProofEngine.apply !proof_state tactic in
+	    let proof_state' = ProofEngine.change !proof_state dgoals in
+	    UI.interpret dgoals >> (
+	      proof_state := proof_state';
+	      if ProofEngine.qed !proof_state then UI.qed () else Lwt.return ()
+	    )
+	  with ProofEngine.TacticFailed ->
+	    Lwt.return (UI.notify "You cannot do that.")
 	)
       in
-      UI.interpret (Goals.push_goal goal)
-      >> loop (ProofEngine.start_proof_for goal)
+      UI.interpret (Goals.push_goal goal) >>
+      enter_loop_event (ProofEngine.start_proof_for goal)
   )
 
 (** Install the interaction reactor into the DOM. *)
@@ -28,6 +37,9 @@ let main =
   Dom_html.window##onload <- Dom_html.handler (fun _ ->
     Random.self_init ();
     UI.init ();
-    start_with Formula.(Goal.(make_goal [mk_conj [Atom "A"; Atom "B"]] (mk_atom "A")));
+    start_with Formula.(Goal.(make_goal [
+      mk_atom "A";
+      mk_conj [Atom "A"; Atom "B"]
+    ] (mk_conj [Atom "A"; Atom "A"])));
     Js._false
   )
